@@ -3,7 +3,7 @@
 获取各种参数的过程参考：https://www.coolapk.com/feed/38579891?shareKey=NGI3ZGZlZTM4MDBjNjMwMzdlM2M~&shareUid=3198334&shareFrom=com.coolapk.app_4.10
 
 
-```js
+```text
 {
 "location": "滨江区", // 输入地区
 "adm": "杭州市",  // 城市的上级行政区划，可设定只在某个行政区划范围内进行搜索，用于排除重名城市或对结果进行过滤   
@@ -13,6 +13,7 @@
 "name2": "2",   // 推送用户2
 "birthday": "2000-01-01", // 推送用户1的生日 只支持输入农历
 "birthday2": "2000-01-01",// 推送用户2的生日 只支持输入农历
+
 // 以下数据获取：http://mp.weixin.qq.com/debug/cgi-bin/sandboxinfo?action=showinfo&t=sandbox/index
 "key": "70add67deb8d8d33",
 "appId": "wxc56b9022",
@@ -21,4 +22,16 @@
 "toUser": ["odW-45hi-ZH3o1rg9i5U","odW-45jDOf1pIwK0I"]
 }
 
+```
+微信公众号模板消息：
+```
+日期：{{date.DATA}}
+地区：{{region.DATA}}
+气温：{{temp.DATA}}
+白昼：{{textDay.DATA}}
+黑夜：{{textNight.DATA}}
+今天是我们恋爱的第{{memorialDay.DATA}}天
+距离：{{name.DATA}} 的生日还有{{birthdayDiff.DATA}}天
+距离：{{name2.DATA}} 的生日还有{{birthdayDiff2.DATA}}天
+今日建议：{{tip.DATA}}
 ```
