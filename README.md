@@ -2,7 +2,7 @@
 
 获取各种参数的过程参考：https://www.coolapk.com/feed/38579891?shareKey=NGI3ZGZlZTM4MDBjNjMwMzdlM2M~&shareUid=3198334&shareFrom=com.coolapk.app_4.10
 
-
+config.json配置说明：
 ```text
 {
 "location": "滨江区", // 输入地区
@@ -24,7 +24,7 @@
 
 ```
 微信公众号模板消息：
-```
+```text
 日期：{{date.DATA}}
 地区：{{region.DATA}}
 气温：{{temp.DATA}}
