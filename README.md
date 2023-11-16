@@ -2,6 +2,8 @@
 
 获取各种参数的过程参考：https://www.coolapk.com/feed/38579891?shareKey=NGI3ZGZlZTM4MDBjNjMwMzdlM2M~&shareUid=3198334&shareFrom=com.coolapk.app_4.10
 
+
+```js
 {
 "location": "滨江区", // 输入地区
 "adm": "杭州市",  // 城市的上级行政区划，可设定只在某个行政区划范围内进行搜索，用于排除重名城市或对结果进行过滤   
@@ -18,3 +20,5 @@
 "templateId": "OSoSPbyNdUIeVm3nV5pptiC8GrwCXzk",
 "toUser": ["odW-45hi-ZH3o1rg9i5U","odW-45jDOf1pIwK0I"]
 }
+
+```
