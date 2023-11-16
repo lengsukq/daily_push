@@ -3,8 +3,10 @@
 获取各种参数的过程参考：https://www.coolapk.com/feed/38579891?shareKey=NGI3ZGZlZTM4MDBjNjMwMzdlM2M~&shareUid=3198334&shareFrom=com.coolapk.app_4.10
 
 启动步骤：
+```shell
 npm i
 node index.js
+```
 
 可以部署到coding开启自动化构建，以达到每天定时发送消息的效果
 
@@ -37,7 +39,7 @@ config.json配置说明：
 白昼：{{textDay.DATA}}
 黑夜：{{textNight.DATA}}
 今天是我们恋爱的第{{memorialDay.DATA}}天
-距离：{{name.DATA}} 的生日还有{{birthdayDiff.DATA}}天
-距离：{{name2.DATA}} 的生日还有{{birthdayDiff2.DATA}}天
+距离{{name.DATA}}的生日还有{{birthdayDiff.DATA}}天
+距离{{name2.DATA}}的生日还有{{birthdayDiff2.DATA}}天
 今日建议：{{tip.DATA}}
 ```
