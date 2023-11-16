@@ -2,6 +2,12 @@
 
 获取各种参数的过程参考：https://www.coolapk.com/feed/38579891?shareKey=NGI3ZGZlZTM4MDBjNjMwMzdlM2M~&shareUid=3198334&shareFrom=com.coolapk.app_4.10
 
+启动步骤：
+npm i
+node index.js
+
+可以部署到coding开启自动化构建，以达到每天定时发送消息的效果
+
 config.json配置说明：
 ```text
 {
