@@ -92,10 +92,33 @@ const getWeatherDetails = async (keywords) => {
                 } else if (keywords === 'indices') {
                     // console.log('获取天气指数信息成功', data.daily[configs.weatherIndex - 1])
                     configs.indices = data.daily[configs.weatherIndex - 1];
+                    if (configs.indices.text.length>20){
+                        configs.indices.text2 = configs.indices.text.slice(20,configs.indices.text.length-1);
+                        configs.indices.text = configs.indices.text.slice(0,20);
+                    }
                 }
 
             } else {
                 console.log('请检查JSON文件是否填写正确')
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+        .then(function () {
+        });
+}
+
+const oneWords = async ()=>{
+    await axios.get(`https://v1.hitokoto.cn/?c=${configs.oneType}&encode=text`)
+        .then((res) => {
+            let data = res.data;
+            //这里获得整个请求响应对象
+            console.log('res',data);
+            configs.oneWords = data;
+            if (configs.oneWords.length>20){
+                configs.oneWords2 = configs.oneWords.slice(20,configs.oneWords.length-1);
+                configs.oneWords = configs.oneWords.slice(0,20);
             }
         })
         .catch(function (error) {
@@ -145,12 +168,15 @@ const setData = async (toUser) => {
             "tip": {
                 "value":configs.indices.text
             },
-            "note_en": {
-                "value": "金句",
+            "tip2": {
+                "value":configs.indices.text2
             },
-            "note_ch": {
-                "value": "英文金句",
-            }
+            "oneWords": {
+                "value": configs.oneWords,
+            },
+            "oneWords2": {
+                "value": configs.oneWords2,
+            },
         }
     }
 }
@@ -190,6 +216,7 @@ const sendMessage = async (accessToken,upInfo)=>{
 }
 
 async function mainFn() {
+    await oneWords();
     await basicInfo();
     await getAccessToken();
     await getCityId();
