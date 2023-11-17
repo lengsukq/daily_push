@@ -35,6 +35,7 @@ config.json配置说明：
 微信公众号模板消息：
 ```text
 日期：{{date.DATA}}
+一言：{{oneWords.DATA}}{{{{oneWords2.DATA}}}}
 地区：{{region.DATA}}
 气温：{{temp.DATA}}
 白昼：{{textDay.DATA}}
@@ -42,6 +43,5 @@ config.json配置说明：
 今天是我们恋爱的第{{memorialDay.DATA}}天
 距离{{name.DATA}}的生日还有{{birthdayDiff.DATA}}天
 距离{{name2.DATA}}的生日还有{{birthdayDiff2.DATA}}天
-今日建议：{{tip.DATA}}
+今日建议：{{tip.DATA}}{{tip2.DATA}}
 ```
-今日建议显示不全是因为微信限制了单个字段不超过20个字符。
