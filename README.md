@@ -14,7 +14,7 @@ config.json配置说明：
 ```text
 {
 "location": "滨江区", // 输入地区
-"adm": "杭州市",  // 城市的上级行政区划，可设定只在某个行政区划范围内进行搜索，用于排除重名城市或对结果进行过滤   
+"adm": "杭州市",  // 选填,城市的上级行政区划，可设定只在某个行政区划范围内进行搜索，用于排除重名城市或对结果进行过滤   
 "weatherIndex": "1", //天气指数，具体查看https://dev.qweather.com/docs/resource/indices-info/
 "fullInLoveDate": "2000-01-01", // 纪念日时间
 "name": "1",   // 推送用户1
@@ -28,6 +28,7 @@ config.json配置说明：
 "appSecret": "96b89bc360ae7315febfbbd",
 "templateId": "OSoSPbyNdUIeVm3nV5pptiC8GrwCXzk",
 "toUser": ["odW-45hi-ZH3o1rg9i5U","odW-45jDOf1pIwK0I"]
+"oneType": "d", // 一言接口,详情https://developer.hitokoto.cn/sentence/
 }
 
 ```
@@ -43,3 +44,4 @@ config.json配置说明：
 距离{{name2.DATA}}的生日还有{{birthdayDiff2.DATA}}天
 今日建议：{{tip.DATA}}
 ```
+今日建议显示不全是因为微信限制了单个字段不超过20个字符。
