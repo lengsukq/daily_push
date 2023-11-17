@@ -8,7 +8,8 @@ npm i
 node index.js
 ```
 
-可以部署到coding开启自动化构建，以达到每天定时发送消息的效果
+可以部署到coding开启自动化构建，以达到每天定时发送消息的效果。<br>
+可以使用GitHub Actions以达到每日自动发送消息，默认发送时间为七点半。
 
 config.json配置说明：
 ```text
