@@ -175,7 +175,7 @@ const setData = async (toUser) => {
                 "value": configs.oneWords,
             },
             "oneWords2": {
-                "value": configs.oneWords2,
+                "value": configs.oneWords2?configs.oneWords2:"",
             },
         }
     }
