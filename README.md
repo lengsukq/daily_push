@@ -45,4 +45,3 @@ config.json配置说明：
 距离{{name2.DATA}}的生日还有{{birthdayDiff2.DATA}}天
 今日建议：{{tip.DATA}}{{tip2.DATA}}
 ```
-今日建议显示不全是因为微信限制了单个字段不超过20个字符。
