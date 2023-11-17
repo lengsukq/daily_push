@@ -35,7 +35,7 @@ config.json配置说明：
 微信公众号模板消息：
 ```text
 日期：{{date.DATA}}
-一言：{{oneWords.DATA}}{{{{oneWords2.DATA}}}}
+一言：{{oneWords.DATA}}{{oneWords2.DATA}}
 地区：{{region.DATA}}
 气温：{{temp.DATA}}
 白昼：{{textDay.DATA}}
