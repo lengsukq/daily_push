@@ -22,9 +22,9 @@ config.json配置说明：
 "name2": "2",   // 推送用户2
 "birthday": "2000-01-01", // 推送用户1的生日 只支持输入农历
 "birthday2": "2000-01-01",// 推送用户2的生日 只支持输入农历
+"key": "70add67deb8d8d33", // 和风天气Key获取，https://id.qweather.com/#/
 
 // 以下数据获取：http://mp.weixin.qq.com/debug/cgi-bin/sandboxinfo?action=showinfo&t=sandbox/index
-"key": "70add67deb8d8d33",
 "appId": "wxc56b9022",
 "appSecret": "96b89bc360ae7315febfbbd",
 "templateId": "OSoSPbyNdUIeVm3nV5pptiC8GrwCXzk",
