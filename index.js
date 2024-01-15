@@ -62,7 +62,7 @@ const basicInfo = async () => {
 }
 // 获取城市id
 const getCityId = async () => {
-    await axios.get(`https://geoapi.qweather.com/v2/city/lookup?location=${configs.location}&adm=${configs.adm}&key=${configs.key}`)
+    await axios.get(`https://geoapi.qweather.com/v2/city/lookup?location=${encodeURIComponent(configs.location)}&adm=${encodeURIComponent(configs.adm)}&key=${configs.key}`)
         .then((res) => {
             let data = res.data;
             //这里获得整个请求响应对象
@@ -217,7 +217,7 @@ const sendMessage = async (accessToken,upInfo)=>{
         });
 }
 
-export async function mainFn() {
+async function mainFn() {
     await oneWords();
     await basicInfo();
     await getAccessToken();
@@ -239,3 +239,4 @@ mainFn().then(r => {
     console.log('mainFn', r, configs)
 })
 
+module.exports=mainFn;

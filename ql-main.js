@@ -9,7 +9,7 @@
  */
 const $ = new Env('微信每日推送');
 const ENV = 'dayPush';
-import {mainFn} from "./index";
+const {mainFn} = require('./index.js');
 // 读取环境变量: process.env[ENV]
 // 读取存储文件: const data = $.getdata($.name) || {};
 // 写入存储文件: $.setdata(data, $.name);
@@ -17,9 +17,7 @@ import {mainFn} from "./index";
 !(async () => {
     // 代码开始
     try {
-        mainFn().then(r => {
-            console.log('mainFn', r)
-        })
+        await mainFn()
     }catch (error){
         console.log('请检查配置文件是否正确')
     }

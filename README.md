@@ -1,4 +1,4 @@
-#daily_push
+# daily_push——微信每日推送
 
 获取各种参数的过程参考：https://www.coolapk.com/feed/38579891?shareKey=NGI3ZGZlZTM4MDBjNjMwMzdlM2M~&shareUid=3198334&shareFrom=com.coolapk.app_4.10
 
@@ -7,9 +7,10 @@
 npm i
 node index.js
 ```
-
-可以部署到coding开启自动化构建，以达到每天定时发送消息的效果。参考：https://www.coolapk.com/feed/51238147?shareKey=Zjk0N2UwZTFjNjcwNjU3YThjNjg~&shareUid=1528711&shareFrom=com.coolapk.market_13.2.1<br>
-可以使用GitHub Actions以达到每日自动发送消息，默认发送时间为七点半。
+# 部署方式
+1、可以部署到coding开启自动化构建，以达到每天定时发送消息的效果。参考：https://www.coolapk.com/feed/51238147?shareKey=Zjk0N2UwZTFjNjcwNjU3YThjNjg~&shareUid=1528711&shareFrom=com.coolapk.market_13.2.1<br>
+2、可以使用GitHub Actions以达到每日自动发送消息，默认发送时间为七点半。<br>
+3、青龙面板
 
 config.json配置说明：
 ```text
