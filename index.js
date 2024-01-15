@@ -217,7 +217,7 @@ const sendMessage = async (accessToken,upInfo)=>{
         });
 }
 
-async function mainFn() {
+export async function mainFn() {
     await oneWords();
     await basicInfo();
     await getAccessToken();
