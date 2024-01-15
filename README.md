@@ -11,10 +11,14 @@ node index.js
 1、可以部署到coding开启自动化构建，以达到每天定时发送消息的效果。参考：https://www.coolapk.com/feed/51238147?shareKey=Zjk0N2UwZTFjNjcwNjU3YThjNjg~&shareUid=1528711&shareFrom=com.coolapk.market_13.2.1  
 2、可以使用GitHub Actions以达到每日自动发送消息，默认发送时间为七点半。  
 3、青龙面板部署
+```text
+拉库命令：ql repo https://github.com/lengsukq/daily_push.git "ql-main" "" "index.js"
+拉库完成后，需要在青龙面板-脚本管理lengsukq——daily_push文件夹中添加configs.json文件并配置好
+```
 ---
-***需要在根目录添加config.json 文件***  
+***需要在根目录添加configs.json 文件***  
 
-config.json配置说明：
+configs.json配置说明：
 ```text
 {
 "location": "滨江区", // 输入地区
