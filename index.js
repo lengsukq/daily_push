@@ -10,13 +10,14 @@ const formatDate = (birthday, isYear = false) => {
     // console.log('isYear---',isYear)
     let inYear = isYear ? today.add(1, 'year') : today
     let BirthdayYear = solarlunar.lunar2solar(inYear.year(), dayjs(birthday).month() + 1, dayjs(birthday).date());
-    // console.log('formatDate',birthday,BirthdayYear,dayjs(birthday).month()+1,dayjs(birthday).date())
 
     let month = BirthdayYear.cMonth;
     let day = BirthdayYear.cDay;
+    // console.log('formatDate',BirthdayYear,birthday,month,day)
+
     month = Number(month) < 10 ? '0' + month : month;
     day = Number(day < 10) ? '0' + day : day;
-    let formatTime = inYear.year() + '-' + month + '-' + day;
+    let formatTime = BirthdayYear.cYear + '-' + month + '-' + day;
     const formattedDate = today.format("YYYY-MM-DD");
     let diffVal = dayjs(today).diff(formatTime, 'day');
 
@@ -52,7 +53,8 @@ const basicInfo = async () => {
         configs.memorialDay = dayjs(today).diff(configs.fullInLoveDate, 'day');
         configs.memorialSecond = dayjs(today).diff(configs.fullInLoveDate, 'second');
         configs.birthdayDiff = getDiffVal(configs.birthday);
-        configs.birthdayDiff2 = getDiffVal(configs.birthday2)
+        configs.birthdayDiff2 = getDiffVal(configs.birthday2);
+        // console.log('birthdayDiff2',configs.birthdayDiff2)
     } catch (err) {
         console.log('请检查JSON文件是否填写正确')
     }
