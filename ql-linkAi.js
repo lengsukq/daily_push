@@ -19,7 +19,7 @@ const notify = require("./sendNotify");
 
     // 代码开始
     try {
-        const linkAuth = 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxODg2OSIsImlhdCI6MTcwNTU2NjAzMiwiZXhwIjoxNzA2MjU3MjMyfQ.qwl9DR5PdzHgveBJc5CLOFzWWajMSilKJX008igwnqYwMWf-3nSj4Q8Eg_MazBJjnWYoWK15N3J2kM1Yyy0UtA';
+        const linkAuth = process.env.linkAuth;
         console.log('linkAuth',linkAuth)
         if (!linkAuth) {
             console.log('请检查linkAuth是否有效')
