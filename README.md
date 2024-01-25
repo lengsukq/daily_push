@@ -12,7 +12,7 @@ node index.js
 2、可以使用GitHub Actions以达到每日自动发送消息，默认发送时间为七点半。  
 3、青龙面板部署
 ```text
-拉库命令：ql repo https://github.com/lengsukq/daily_push.git "ql-main" "" "index.js"
+拉库命令：ql repo https://github.com/lengsukq/daily_push.git "ql-" "" "index.js"
 --拉库完成后，需要在青龙面板-脚本管理lengsukq——daily_push文件夹中添加configs.json文件并配置好
 --青龙面板-依赖管理-创建依赖 分别添加 axios、dayjs、solarlunar 三个nodejs的依赖，安装完成后即可运行
 ```

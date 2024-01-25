@@ -10,6 +10,7 @@
 const $ = new Env('微信每日推送');
 const ENV = 'dayPush';
 const {mainFn} = require('./index.js');
+const notify = require('./sendNotify');
 // 读取环境变量: process.env[ENV]
 // 读取存储文件: const data = $.getdata($.name) || {};
 // 写入存储文件: $.setdata(data, $.name);
@@ -18,8 +19,11 @@ const {mainFn} = require('./index.js');
     // 代码开始
     try {
         await mainFn()
+        await notify.sendNotify('微信每日推送', '每日推送成功')
     }catch (error){
         console.log('请检查配置文件是否正确')
+        await notify.sendNotify('微信每日推送', '请检查配置文件是否正确')
+
     }
 })()
     .catch((e) => {
