@@ -43,7 +43,9 @@ const notify = require("./sendNotify");
                     }
                 })
                 .catch(function (error) {
-                    console.log(error);
+                    msg=error;
+
+                    console.log('error',error);
                 })
                 .then(function () {
                 });
