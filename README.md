@@ -5,7 +5,9 @@
 
 ![img.png](readmeImg%2Fimg.png)
 
-
+### 其他功能 
+- linkAi平台自动签到（青龙面板环境变量添加linkAuth：linkAi平台的Auth请求头）
+- 后续增加，敬请期待
 
 ## 获取各种参数的过程参考： 
 https://www.coolapk.com/feed/38579891?shareKey=NGI3ZGZlZTM4MDBjNjMwMzdlM2M~&shareUid=3198334&shareFrom=com.coolapk.app_4.10
