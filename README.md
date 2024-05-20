@@ -6,9 +6,15 @@
 ![img.png](readmeImg%2Fimg.png)
 
 ### 其他功能 
-- linkAi平台自动签到（青龙面板环境变量添加linkAuth：linkAi平台的Auth请求头）
+- linkAi平台自动签到（青龙面板环境变量添加linkAuth：linkAi平台的Auth请求头，或者添加如下的linkInfo） 
+```json
+{
+"username":"linkAi账号名",
+"password":"linkAi账号密码"
+}
+```
 - 放假的最后一天发送邮件(仅支持2024年)，青龙面板需要安装nodemailer依赖，并且添加CHECKDATA环境变量，多个邮箱以英文的;分割，最后一个邮箱不需要加“;”，需要严格按照下面的json格式添加环境变量
-```text
+```json
 {
 "user":"xxxxx@qq.com",
 "password":"上面的邮箱授权码",

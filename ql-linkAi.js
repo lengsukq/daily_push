@@ -10,45 +10,74 @@
 const $ = new Env('linkAi平台自动签到');
 const axios = require("axios");
 const notify = require("./sendNotify");
+const FormData = require('form-data');
 // 读取环境变量: process.env[ENV]
 // 读取存储文件: const data = $.getdata($.name) || {};
 // 写入存储文件: $.setdata(data, $.name);
+let msg;
+// 登录获取token
+async function login(username, password) {
+    console.log('开始登录', username,password)
+    const formData = new FormData();
+    formData.append('username', username);
+    formData.append('password', password);
+    try {
+        const response = await axios.post('https://link-ai.tech/api/login', formData);
+        // 处理响应数据
+        // console.log('linkAi登录', response.data);
+        return response.data;
+    } catch (error) {
+        // 处理错误
+        console.error('登录失败:', error);
+    }
 
+}
+async function getScore(linkAuth) {
+    console.log('传入的linkAuth',linkAuth)
+    await axios.get('https://link-ai.tech/api/chat/web/app/user/sign/in', {
+        headers: {
+            'Authorization': `Bearer ${linkAuth}`
+        }
+    })
+        .then(async (res) => {
+            //这里获得整个请求响应对象
+            console.log('res', res.data);
+            if (res.data.success) {
+                msg=`签到成功，获得积分${res.data.data.score}`
+                console.log(msg)
+
+            } else {
+                msg=res.data.message;
+                console.log(msg)
+
+            }
+        })
+        .catch(function (error) {
+            msg=error;
+
+            console.log('error',error);
+        })
+        .then(function () {
+        });
+}
 !(async () => {
-    let msg;
 
     // 代码开始
     try {
         const linkAuth = process.env.linkAuth;
+        const linkInfo = JSON.parse(process.env.linkInfo);
+        console.log('linkInfo',linkInfo)
         console.log('linkAuth',linkAuth)
         if (!linkAuth) {
-            console.log('请检查linkAuth是否有效')
+            console.log('未设置linkAuth')
+            if (linkInfo){
+                console.log('手动获取token')
+                const res = await login(linkInfo.username ,linkInfo.password)
+                // console.log('res',res.data)
+                await getScore(res.data.token)
+            }
         } else {
-            await axios.get('https://link-ai.tech/api/chat/web/app/user/sign/in', {
-                headers: {
-                    'Authorization': linkAuth
-                }
-            })
-                .then(async (res) => {
-                    //这里获得整个请求响应对象
-                    console.log('res', res.data);
-                    if (res.data.success) {
-                        msg=`签到成功，获得积分${res.data.data.score}`
-                        console.log(msg)
-
-                    } else {
-                        msg=res.data.message;
-                        console.log(msg)
-
-                    }
-                })
-                .catch(function (error) {
-                    msg=error;
-
-                    console.log('error',error);
-                })
-                .then(function () {
-                });
+            await getScore(linkAuth)
         }
 
 
