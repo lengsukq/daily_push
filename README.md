@@ -20,6 +20,13 @@
 "password":"上面的邮箱授权码",
 "emailString":"邮箱1@qq.com;邮箱2@qq.com"
 }
+``` 
+- 联想延保每日签到  所需依赖：CryptoJS、axios，环境变量：lenovoInfo
+```json
+{
+"account":"联想账号",
+"password":"联想账号密码"
+}
 ```
 - 后续增加，敬请期待
 
