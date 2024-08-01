@@ -66,8 +66,6 @@ async function getScore(linkAuth) {
     try {
         const linkAuth = process.env.linkAuth;
         const linkInfo = JSON.parse(process.env.linkInfo);
-        console.log('linkInfo',linkInfo)
-        console.log('linkAuth',linkAuth)
         if (!linkAuth) {
             console.log('未设置linkAuth')
             if (linkInfo){

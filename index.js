@@ -5,15 +5,12 @@ const dayjs = require('dayjs')
 const solarlunar = require('solarlunar')
 const today = dayjs();
 
-// console.log('configs', configs)
 const formatDate = (birthday, isYear = false) => {
-    // console.log('isYear---',isYear)
     let inYear = isYear ? today.add(1, 'year') : today
     let BirthdayYear = solarlunar.lunar2solar(inYear.year(), dayjs(birthday).month() + 1, dayjs(birthday).date());
 
     let month = BirthdayYear.cMonth;
     let day = BirthdayYear.cDay;
-    // console.log('formatDate',BirthdayYear,birthday,month,day)
 
     month = Number(month) < 10 ? '0' + month : month;
     day = Number(day < 10) ? '0' + day : day;
@@ -24,7 +21,6 @@ const formatDate = (birthday, isYear = false) => {
     if (diffVal === 0) {
         diffVal = formattedDate === formatTime ? 0 : -1;
     }
-    // console.log(`格式化后的${isYear?'明年':'今年'}生日`,formatTime);
     return diffVal
 
 
@@ -235,8 +231,8 @@ async function mainFn() {
 }
 
 
-mainFn().then(r => {
-    console.log('mainFn', r, configs)
-})
+// mainFn().then(r => {
+//     console.log('mainFn', r, configs)
+// })
 
 module.exports=mainFn;
