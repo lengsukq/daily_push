@@ -6,6 +6,7 @@
     "crypto-js": "^4.2.0",
     "dayjs": "^1.11.10",
     "form-data": "^4.0.0",
+    "http": "^0.0.1-security",
     "nodemailer": "^6.9.13",
     "solarlunar": "^2.0.7",
     "ssh2": "^1.15.0"
