@@ -1,238 +1,161 @@
 const axios = require('axios');
-const {readFileSync} = require('fs');
+const { readFileSync } = require('fs');
 const configs = JSON.parse(readFileSync("configs.json"));
-const dayjs = require('dayjs')
-const solarlunar = require('solarlunar')
+const dayjs = require('dayjs');
+const solarlunar = require('solarlunar');
 const today = dayjs();
 
+// 格式化生日
 const formatDate = (birthday, isYear = false) => {
-    let inYear = isYear ? today.add(1, 'year') : today
-    let BirthdayYear = solarlunar.lunar2solar(inYear.year(), dayjs(birthday).month() + 1, dayjs(birthday).date());
+    const currentDay = isYear ? today.add(1, 'year') : today;
+    const birthdayDate = dayjs(birthday);
+    const BirthdayYear = solarlunar.lunar2solar(currentDay.year(), birthdayDate.month() + 1, birthdayDate.date());
 
-    let month = BirthdayYear.cMonth;
-    let day = BirthdayYear.cDay;
-
-    month = Number(month) < 10 ? '0' + month : month;
-    day = Number(day < 10) ? '0' + day : day;
-    let formatTime = BirthdayYear.cYear + '-' + month + '-' + day;
+    const formatTime = `${BirthdayYear.cYear}-${String(BirthdayYear.cMonth).padStart(2, '0')}-${String(BirthdayYear.cDay).padStart(2, '0')}`;
     const formattedDate = today.format("YYYY-MM-DD");
     let diffVal = dayjs(today).diff(formatTime, 'day');
 
-    if (diffVal === 0) {
-        diffVal = formattedDate === formatTime ? 0 : -1;
+    if (diffVal === 0 && formattedDate !== formatTime) {
+        diffVal = -1; // 处理如果今天不是生日的情况
     }
-    return diffVal
 
-
+    return diffVal;
 }
 
+// 获取生日差值
 const getDiffVal = (birthday) => {
     let diffVal = formatDate(birthday);
-    // console.log('生日差值',diffVal)
 
+    // 今年生日已过，计算明年生日
     if (diffVal > 0) {
-        // console.log('今年生日已经过了',diffVal);
         diffVal = formatDate(birthday, true);
-        // console.log('明年的生日还有',Math.abs(diffVal))
-    } else if (diffVal < 0) {
-        // console.log('距离生日还有',Math.abs(diffVal));
-    } else if (diffVal === 0) {
-        // console.log('今天就是生日')
     }
 
     return Math.abs(diffVal);
 }
 
+// 获取基础信息
 const basicInfo = async () => {
     try {
-        // 获取纪念日
         configs.memorialDay = dayjs(today).diff(configs.fullInLoveDate, 'day');
         configs.memorialSecond = dayjs(today).diff(configs.fullInLoveDate, 'second');
         configs.birthdayDiff = getDiffVal(configs.birthday);
         configs.birthdayDiff2 = getDiffVal(configs.birthday2);
-        // console.log('birthdayDiff2',configs.birthdayDiff2)
     } catch (err) {
-        console.log('请检查JSON文件是否填写正确')
+        console.log('请检查JSON文件是否填写正确');
     }
+}
 
-}
-// 获取城市id
+// 获取城市ID
 const getCityId = async () => {
-    await axios.get(`https://geoapi.qweather.com/v2/city/lookup?location=${encodeURIComponent(configs.location)}&adm=${encodeURIComponent(configs.adm)}&key=${configs.key}`)
-        .then((res) => {
-            let data = res.data;
-            //这里获得整个请求响应对象
-            // console.log('res',data);
-            if (data.code === '200') {
-                // console.log('获取城市id', data.location[0].id);
-                configs.id = data.location[0].id;
-            } else {
-                console.log('请检查JSON文件是否填写正确')
-            }
-        })
-        .catch(function (error) {
-            console.log(error);
-        })
-        .then(function () {
-        });
+    try {
+        const { data } = await axios.get(`https://geoapi.qweather.com/v2/city/lookup?location=${encodeURIComponent(configs.location)}&adm=${encodeURIComponent(configs.adm)}&key=${configs.key}`);
+        if (data.code === '200') {
+            configs.id = data.location[0].id;
+        } else {
+            console.log('请检查JSON文件是否填写正确');
+        }
+    } catch (error) {
+        console.log(error);
+    }
 }
+
 // 获取天气详情
 const getWeatherDetails = async (keywords) => {
-    await axios.get(`https://devapi.qweather.com/v7/${keywords}/3d?location=${configs.id}&key=${configs.key}&type=0`)
-        .then((res) => {
-            let data = res.data;
-            //这里获得整个请求响应对象
-            // console.log('getWeatherDetails---res', data);
-            if (data.code === '200') {
-                if (keywords === 'weather') {
-                    // console.log('获取每日天气信息成功', data.daily[0])
-                    configs.weather = data.daily[0];
-                } else if (keywords === 'indices') {
-                    // console.log('获取天气指数信息成功', data.daily[configs.weatherIndex - 1])
-                    configs.indices = data.daily[configs.weatherIndex - 1];
-                    if (configs.indices.text.length>20){
-                        configs.indices.text2 = configs.indices.text.slice(20,configs.indices.text.length-1);
-                        configs.indices.text = configs.indices.text.slice(0,20);
-                    }
+    try {
+        const { data } = await axios.get(`https://devapi.qweather.com/v7/${keywords}/3d?location=${configs.id}&key=${configs.key}&type=0`);
+        if (data.code === '200') {
+            if (keywords === 'weather') {
+                configs.weather = data.daily[0];
+            } else if (keywords === 'indices') {
+                configs.indices = data.daily[configs.weatherIndex - 1];
+                if (configs.indices.text.length > 20) {
+                    configs.indices.text2 = configs.indices.text.slice(20);
+                    configs.indices.text = configs.indices.text.slice(0, 20);
                 }
-
-            } else {
-                console.log('请检查JSON文件是否填写正确')
             }
-        })
-        .catch(function (error) {
-            console.log(error);
-        })
-        .then(function () {
-        });
-}
-
-const oneWords = async ()=>{
-    await axios.get(`https://v1.hitokoto.cn/?c=${configs.oneType}&encode=text`)
-        .then((res) => {
-            let data = res.data;
-            //这里获得整个请求响应对象
-            console.log('res',data);
-            configs.oneWords = data;
-            if (configs.oneWords.length>20){
-                configs.oneWords2 = configs.oneWords.slice(20,configs.oneWords.length-1);
-                configs.oneWords = configs.oneWords.slice(0,20);
-            }
-        })
-        .catch(function (error) {
-            console.log(error);
-        })
-        .then(function () {
-        });
-}
-
-const setData = async (toUser) => {
-    return {
-        "touser": toUser,
-        "template_id": configs.templateId,
-        "url": "http://weixin.qq.com/download",
-        "topcolor": "#FF0000",
-        "data": {
-            "date": {
-                "value": today.format("YYYY-MM-DD"),
-            },
-            "region": {
-                "value": configs.location,
-            },
-            "temp": {
-                "value": `${configs.weather.tempMin}度~${configs.weather.tempMax}度`
-            },
-            "textDay": {
-                "value": configs.weather.textDay+","+configs.weather.windDirDay,
-            },
-            "textNight": {
-                "value": configs.weather.textNight+","+configs.weather.windDirNight,
-            },
-            "memorialDay": {
-                "value": configs.memorialDay,
-            },
-            "name":{
-                "value" : configs.name,
-            },
-            "name2":{
-                "value" : configs.name2,
-            },
-            "birthdayDiff":{
-                "value" : configs.birthdayDiff,
-            },
-            "birthdayDiff2":{
-                "value" : configs.birthdayDiff2,
-            },
-            "tip": {
-                "value":configs.indices.text
-            },
-            "tip2": {
-                "value":configs.indices.text2
-            },
-            "oneWords": {
-                "value": configs.oneWords,
-            },
-            "oneWords2": {
-                "value": configs.oneWords2?configs.oneWords2:"",
-            },
+        } else {
+            console.log('请检查JSON文件是否填写正确');
         }
+    } catch (error) {
+        console.log(error);
     }
 }
+
+// 获取一言
+const oneWords = async () => {
+    try {
+        const { data } = await axios.get(`https://v1.hitokoto.cn/?c=${configs.oneType}&encode=text`);
+        configs.oneWords = data.length > 20 ? data.slice(0, 20) : data;
+        configs.oneWords2 = data.length > 20 ? data.slice(20) : '';
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+// 发送消息所需的数据
+const setData = (toUser) => ({
+    "touser": toUser,
+    "template_id": configs.templateId,
+    "url": "http://weixin.qq.com/download",
+    "topcolor": "#FF0000",
+    "data": {
+        "date": { "value": today.format("YYYY-MM-DD") },
+        "region": { "value": configs.location },
+        "temp": { "value": `${configs.weather.tempMin}度~${configs.weather.tempMax}度` },
+        "textDay": { "value": `${configs.weather.textDay},${configs.weather.windDirDay}` },
+        "textNight": { "value": `${configs.weather.textNight},${configs.weather.windDirNight}` },
+        "memorialDay": { "value": configs.memorialDay },
+        "name": { "value": configs.name },
+        "name2": { "value": configs.name2 },
+        "birthdayDiff": { "value": configs.birthdayDiff },
+        "birthdayDiff2": { "value": configs.birthdayDiff2 },
+        "tip": { "value": configs.indices.text },
+        "tip2": { "value": configs.indices.text2 || "" },
+        "oneWords": { "value": configs.oneWords },
+        "oneWords2": { "value": configs.oneWords2 || "" },
+    }
+});
+
 // 获取access_token
-const getAccessToken = async ()=>{
-    await axios.get(`https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${configs.appId}&secret=${configs.appSecret}`)
-        .then((res) => {
-            let data = res.data;
-            //这里获得整个请求响应对象
-            // console.log('res',data.access_token);
-            configs.accessToken = data.access_token
-        })
-        .catch(function (error) {
-            console.log(error);
-            console.log('请检查JSON文件是否填写正确')
-
-        })
-        .then(function () {
-        });
-}
-const sendMessage = async (accessToken,upInfo)=>{
-    console.log("sendMessage-upInfo",JSON.stringify(upInfo))
-    await axios.post(`https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=${accessToken}`,JSON.stringify(upInfo),{
-        headers: {'Content-Type': 'application/json'}
-    })
-        .then((res) => {
-            let data = res.data;
-            //这里获得整个请求响应对象
-            console.log('sendMessage---res',data);
-        })
-        .catch(function (error) {
-            console.log(error);
-            console.log('请检查JSON文件是否填写正确')
-        })
-        .then(function () {
-        });
+const getAccessToken = async () => {
+    try {
+        const { data } = await axios.get(`https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${configs.appId}&secret=${configs.appSecret}`);
+        configs.accessToken = data.access_token;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
+// 发送消息
+const sendMessage = async (accessToken, upInfo) => {
+    try {
+        const { data } = await axios.post(`https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=${accessToken}`, JSON.stringify(upInfo), {
+            headers: { 'Content-Type': 'application/json' }
+        });
+        console.log('sendMessage---res', data);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+// 主函数
 async function mainFn() {
     await oneWords();
     await basicInfo();
     await getAccessToken();
     await getCityId();
-    await getWeatherDetails('indices');
-    await getWeatherDetails('weather');
+    await Promise.all([
+        getWeatherDetails('indices'),
+        getWeatherDetails('weather')
+    ]);
 
     for (const item of configs.toUser) {
-        let upInfo = await setData(item);
-        await sendMessage(configs.accessToken,upInfo)
-
+        const upInfo = setData(item);
+        await sendMessage(configs.accessToken, upInfo);
     }
 
-    return configs
+    return configs;
 }
 
-
-// mainFn().then(r => {
-//     console.log('mainFn', r, configs)
-// })
-
-module.exports=mainFn;
+module.exports = mainFn;
