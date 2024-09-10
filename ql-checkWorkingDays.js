@@ -15,7 +15,7 @@ const notify = require("./sendNotify");
 // 写入存储文件: $.setdata(data, $.name);
 
 !(async () => {
-    let msg;
+    let msg = '今天不是最后一天的工作日';
 
     // 代码开始
     try {
