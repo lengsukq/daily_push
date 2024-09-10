@@ -1,6 +1,5 @@
 const axios = require('axios');
 const { readFileSync } = require('fs');
-const configs = JSON.parse(readFileSync("configs.json"));
 const dayjs = require('dayjs');
 const solarlunar = require('solarlunar');
 const today = dayjs();
@@ -42,18 +41,19 @@ const basicInfo = async () => {
         configs.birthdayDiff = getDiffVal(configs.birthday);
         configs.birthdayDiff2 = getDiffVal(configs.birthday2);
     } catch (err) {
-        console.log('请检查JSON文件是否填写正确');
+        console.log('basicInfo-请检查JSON文件是否填写正确',err);
     }
 }
 
 // 获取城市ID
 const getCityId = async () => {
+
     try {
         const { data } = await axios.get(`https://geoapi.qweather.com/v2/city/lookup?location=${encodeURIComponent(configs.location)}&adm=${encodeURIComponent(configs.adm)}&key=${configs.key}`);
         if (data.code === '200') {
             configs.id = data.location[0].id;
         } else {
-            console.log('请检查JSON文件是否填写正确');
+            console.log('getCityId-请检查JSON文件是否填写正确');
         }
     } catch (error) {
         console.log(error);
@@ -75,7 +75,7 @@ const getWeatherDetails = async (keywords) => {
                 }
             }
         } else {
-            console.log('请检查JSON文件是否填写正确');
+            console.log('getWeatherDetails.请检查JSON文件是否填写正确');
         }
     } catch (error) {
         console.log(error);
@@ -138,24 +138,53 @@ const sendMessage = async (accessToken, upInfo) => {
         console.log(error);
     }
 }
-
+let configs;
 // 主函数
 async function mainFn() {
+    let configsEnv;
+    try {
+        configsEnv = readFileSync("configs.json", 'utf-8');
+    } catch (error) {
+        configsEnv = process.env.daliyPushConfigs;
+    }
+
+    if (!configsEnv) {
+        console.error("No configuration found.");
+        return;
+    }
+
+    try {
+        if (Array.isArray(configsEnv)) {
+            for (const config of configsEnv) {
+                await processConfig(config);
+            }
+        } else {
+            await processConfig(configsEnv);
+        }
+    } catch (error) {
+        console.error("An error occurred:", error);
+    }
+}
+// 执行配置
+
+async function processConfig(config) {
+    configs = JSON.parse(config);
+    console.log('processConfig', configs);
     await oneWords();
     await basicInfo();
     await getAccessToken();
     await getCityId();
+
     await Promise.all([
         getWeatherDetails('indices'),
         getWeatherDetails('weather')
     ]);
 
-    for (const item of configs.toUser) {
-        const upInfo = setData(item);
+    for (const user of configs.toUser) {
+        const upInfo = setData(user);
         await sendMessage(configs.accessToken, upInfo);
     }
-
-    return configs;
 }
+
 
 module.exports = mainFn;
