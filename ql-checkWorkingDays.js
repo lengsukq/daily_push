@@ -85,6 +85,7 @@ const notify = require("./sendNotify");
         console.log(resultText);
 
         if (result.isLastWorkingDay) {
+            msg = '今天是最后一个工作日，发送邮件通知';
             console.log('今天是最后一个工作日，发送邮件通知');
             const nodemailer = require('nodemailer');
             // 创建一个SMTP传输器
