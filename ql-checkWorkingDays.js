@@ -4,128 +4,157 @@
  * 最后一天工作日发送邮件
  *
  * 环境变量定义:
- *  - foo: 其含义
- *  - bar: 其含义
+ *  - CHECKDATA: JSON 格式，包含 user（邮箱地址）, password（邮箱密码或授权码）, emailString（收件人邮箱地址，多个邮箱用分号分隔）
  */
 const $ = new Env('最后一天工作日发送邮件');
 const axios = require("axios");
 const notify = require("./sendNotify");
-// 读取环境变量: process.env[ENV]
-// 读取存储文件: const data = $.getdata($.name) || {};
-// 写入存储文件: $.setdata(data, $.name);
 
 !(async () => {
-    let msg = '今天不是最后一天的工作日';
+    let message = '今天不是本月最后一个工作日';
 
-    // 代码开始
     try {
-        function getTodayDate() {
-            let today = new Date();
-            let year = today.getFullYear();
-            let month = String(today.getMonth() + 1).padStart(2, '0'); // 月份从0开始计数，所以加1
-            let day = String(today.getDate()).padStart(2, '0');
+        const checkData = JSON.parse(process.env.CHECKDATA);
+
+        // 节假日和调休配置 (格式: YYYY-MM-DD)
+        const holidays = [
+            '2025-01-01', '2025-01-26', '2025-02-08', '2025-04-04', '2025-04-05',
+            '2025-05-01', '2025-05-02', '2025-05-03', '2025-06-02', '2025-09-28',
+            '2025-10-01', '2025-10-02', '2025-10-03', '2025-10-04', '2025-10-05',
+            '2025-10-06', '2025-10-07',
+        ];
+
+        const workingDays = [
+            '2025-01-26', '2025-02-08', '2025-04-27', '2025-05-31', '2025-10-11',
+        ];
+
+        /**
+         * 检查给定日期是否为工作日
+         * @param {Date} date 要检查的日期对象
+         * @returns {boolean} 如果是工作日则返回 true，否则返回 false
+         */
+        function isWorkDay(date) {
+            const dayOfWeek = date.getDay(); // 0 (Sunday) to 6 (Saturday)
+            const formattedDate = formatDate(date); // YYYY-MM-DD
+
+            if (holidays.includes(formattedDate)) {
+                return false; // 特殊假期
+            } else if (workingDays.includes(formattedDate)) {
+                return true; // 调休工作日
+            }
+
+            return dayOfWeek !== 0 && dayOfWeek !== 6; // 周一至周五为工作日
+        }
+
+        /**
+         * 检查给定日期是否为本月的最后一个工作日
+         * @param {Date} date 要检查的日期对象
+         * @returns {boolean} 如果是本月最后一个工作日则返回 true，否则返回 false
+         */
+        function isLastWorkDayOfMonth(date) {
+            const lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0); // 当月最后一天
+            let lastWorkDay = new Date(lastDayOfMonth); // 复制一份，避免修改原日期
+
+            // 循环向前查找，直到找到最后一个工作日
+            while (!isWorkDay(lastWorkDay)) {
+                lastWorkDay.setDate(lastWorkDay.getDate() - 1);
+            }
+
+            return isSameDay(date, lastWorkDay); // 判断给定日期是否为当月的最后一个工作日
+        }
+
+        /**
+         * 格式化日期为 YYYY-MM-DD 字符串
+         * @param {Date} date Date 对象
+         * @returns {string} 格式化后的日期字符串
+         */
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
             return `${year}-${month}-${day}`;
         }
 
-        const CHECKDATA = JSON.parse(process.env.CHECKDATA)
-
-        function checkWorkingDays(inputDate) {
-            // 定义假期和特殊工作日
-            const holidays = [
-                '2025-01-01', '2025-01-26', '2025-02-08', '2025-04-04', '2025-04-05',
-                '2025-05-01', '2025-05-02', '2025-05-03', '2025-06-02', '2025-09-28',
-                '2025-10-01', '2025-10-02', '2025-10-03', '2025-10-04', '2025-10-05',
-                '2025-10-06', '2025-10-07',
-            ];
-
-            const workingDays = [
-                '2025-01-26', '2025-02-08', '2025-04-27', '2025-05-31', '2025-10-11',
-            ];
-
-            // 检查指定日期是否为工作日
-            function isWorkDay(date) {
-                const dayOfWeek = date.getDay();
-                const dateFormat = date.toISOString().split('T')[0];
-
-                if (holidays.includes(dateFormat)) {
-                    return false; // 特殊假期
-                } else if (workingDays.includes(dateFormat)) {
-                    return true; // 调休工作日
-                }
-
-                return dayOfWeek !== 0 && dayOfWeek !== 6; // 周一至周五为工作日
-            }
-
-            // 创建 Date 实例
-            const date = new Date(inputDate);
-
-            // 判断输入的日期是否为工作日
-            const isInputDayWorkDay = isWorkDay(date);
-
-            // 获取第二天的日期
-            date.setDate(date.getDate() + 1);
-            const isNextDayWorkDay = isWorkDay(date);
-
-            return {
-                inputDay: isInputDayWorkDay,
-                nextDay: isNextDayWorkDay,
-                nextDate: date.toISOString().split('T')[0],
-                isLastWorkingDay: isInputDayWorkDay && !isNextDayWorkDay
-            };
+        /**
+         * 判断两个日期是否为同一天
+         * @param {Date} date1 第一个日期
+         * @param {Date} date2 第二个日期
+         * @returns {boolean} 如果是同一天则返回 true，否则返回 false
+         */
+        function isSameDay(date1, date2) {
+            return (
+                date1.getFullYear() === date2.getFullYear() &&
+                date1.getMonth() === date2.getMonth() &&
+                date1.getDate() === date2.getDate()
+            );
         }
 
-// 使用方式示例:
-        const input = '' || getTodayDate(); // 假设的输入日期，格式为 yyyy-mm-dd
-        const result = checkWorkingDays(input);
-        let resultText = `${input}${result.inputDay ? '是工作日' : '不是工作日'}，且第二天${result.nextDate}${result.nextDay ? '是工作日' : '不是工作日'}。是不是最后的工作日：${result.isLastWorkingDay}。`;
-
-        console.log(resultText);
-
-        if (result.isLastWorkingDay) {
-            msg = '今天是最后一个工作日，发送邮件通知';
-            console.log('今天是最后一个工作日，发送邮件通知');
+        /**
+         * 发送邮件通知
+         * @param {string} subject 邮件主题
+         * @param {string} text 邮件内容
+         */
+        async function sendEmail(subject, text) {
             const nodemailer = require('nodemailer');
-            // 创建一个SMTP传输器
+
+            // 创建一个 SMTP 传输器
             const transporter = nodemailer.createTransport({
                 host: 'smtp.qq.com', // QQ邮箱的SMTP服务器地址
                 port: 465, // 通常SMTP服务器使用的端口是465（SSL）或587（TLS）
                 secure: true, // 如果端口是465，则设置为true
                 auth: {
-                    user: CHECKDATA.user, // 你的邮箱地址
-                    pass: CHECKDATA.password // 你的邮箱密码或授权码
+                    user: checkData.user, // 你的邮箱地址
+                    pass: checkData.password // 你的邮箱密码或授权码
                 }
             });
+
             // 假设你有一个包含多个邮箱地址的字符串，用分号分隔
-            const emailString = CHECKDATA.emailString;
-            // 使用分号将字符串分割成数组
-            const emailAddresses = emailString.split(';');
+            const emailAddresses = checkData.emailString.split(';');
 
             // 设置邮件选项
-            let mailOptions = {
-                from: CHECKDATA.user, // 发件人邮箱地址
+            const mailOptions = {
+                from: checkData.user, // 发件人邮箱地址
                 to: emailAddresses, // 收件人邮箱地址
-                subject: '日期预报', // 邮件主题
-                text: resultText // 纯文本内容
+                subject: subject, // 邮件主题
+                text: text // 纯文本内容
             };
 
             // 发送邮件
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log('Email sent: ' + info.response);
-                }
-            });
+            try {
+                const info = await transporter.sendMail(mailOptions);
+                console.log('邮件发送成功: ' + info.response);
+            } catch (error) {
+                console.error('邮件发送失败: ', error);
+                throw error; // 重新抛出异常，让外层 catch 捕获
+            }
         }
 
+        // 获取今天的日期
+        const today = new Date();
+        const formattedToday = formatDate(today);
 
+        // 检查今天是否为本月最后一个工作日
+        const isTodayLastWorkDay = isLastWorkDayOfMonth(today);
+        console.log(`${formattedToday}是否为本月最后一个工作日: ${isTodayLastWorkDay}`);
+
+        if (isTodayLastWorkDay) {
+            message = '今天是本月最后一个工作日，发送邮件通知';
+            console.log(message);
+
+            try {
+                // 发送邮件
+                await sendEmail('本月最后一个工作日通知', `今天是${formattedToday}，是本月最后一个工作日。`);
+            } catch (emailError) {
+                message = '发送邮件失败，请检查邮件配置';
+                console.error(message, emailError);
+            }
+        }
     } catch (error) {
-        msg = "检查环境变量是否填写正确"
-        console.log(msg)
-        
+        message = '发生错误，请检查环境变量 CHECKDATA 是否填写正确，以及日期判断逻辑。';
+        console.error(message, error);
+    } finally {
+        await notify.sendNotify('最后一天工作日发送邮件', message);
     }
-    await notify.sendNotify('最后一天工作日发送邮件', msg)
-
 })()
     .catch((e) => {
         $.logErr(e);
