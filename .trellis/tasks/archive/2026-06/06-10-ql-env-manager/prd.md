@@ -100,11 +100,11 @@
 
 ## Acceptance Criteria
 
-- [ ] 用户可配置青龙面板的连接信息（API 地址 + Token）
-- [ ] 用户可查看青龙面板中所有环境变量列表
-- [ ] 用户可可视化编辑 `daliyPushConfigs`（无需手写 JSON）
-- [ ] 用户可创建/删除/启用/禁用 `daliyPushConfigs`
-- [ ] UI 风格为 iOS 大圆角毛玻璃简白风格
+- [x] 用户可配置青龙面板的连接信息（API 地址 + Token）
+- [x] 用户可查看青龙面板中所有环境变量列表
+- [x] 用户可可视化编辑 `daliyPushConfigs`（无需手写 JSON）
+- [x] 用户可创建/删除/启用/禁用 `daliyPushConfigs`
+- [x] UI 风格为 iOS 大圆角毛玻璃简白风格
 
 ## Out of Scope (MVP)
 
