@@ -13,7 +13,9 @@ export interface QLConnection {
   id?: number;
   name: string;
   url: string;
-  token: string;
+  clientId: string;
+  clientSecret: string;
+  token?: string;
   createdAt?: string;
   updatedAt?: string;
 }

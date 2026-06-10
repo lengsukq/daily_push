@@ -10,9 +10,9 @@ export async function getQlConnection() {
   return db.select().from(qlConnections).where(eq(qlConnections.name, "default")).get();
 }
 
-export async function upsertQlConnection(url: string, token: string) {
-  return db.insert(qlConnections).values({ url, token }).onConflictDoUpdate({
+export async function upsertQlConnection(url: string, clientId: string, clientSecret: string) {
+  return db.insert(qlConnections).values({ url, clientId, clientSecret }).onConflictDoUpdate({
     target: qlConnections.name,
-    set: { url, token, updatedAt: new Date().toISOString() },
+    set: { url, clientId, clientSecret, updatedAt: new Date().toISOString() },
   }).run();
 }

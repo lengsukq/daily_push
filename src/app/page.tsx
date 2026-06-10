@@ -34,6 +34,35 @@ export default function DashboardPage() {
           </GlassContainer>
         </Link>
       </div>
+
+      <div>
+        <h2 className="text-lg font-semibold text-gray-900 mb-3">脚本配置</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <Link href="/env/scripts/checkdata">
+            <GlassContainer className="hover:shadow-xl transition-shadow duration-300 cursor-pointer">
+              <div className="text-2xl mb-2">📧</div>
+              <h3 className="font-semibold text-gray-900">邮件配置</h3>
+              <p className="text-xs text-gray-400">CHECKDATA</p>
+            </GlassContainer>
+          </Link>
+
+          <Link href="/env/scripts/lenovo">
+            <GlassContainer className="hover:shadow-xl transition-shadow duration-300 cursor-pointer">
+              <div className="text-2xl mb-2">💻</div>
+              <h3 className="font-semibold text-gray-900">联想签到</h3>
+              <p className="text-xs text-gray-400">lenovoInfo</p>
+            </GlassContainer>
+          </Link>
+
+          <Link href="/env/scripts/linkai">
+            <GlassContainer className="hover:shadow-xl transition-shadow duration-300 cursor-pointer">
+              <div className="text-2xl mb-2">🤖</div>
+              <h3 className="font-semibold text-gray-900">LinkAI 签到</h3>
+              <p className="text-xs text-gray-400">linkAuth / linkInfo</p>
+            </GlassContainer>
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

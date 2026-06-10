@@ -17,16 +17,16 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { url, token } = body;
+    const { url, clientId, clientSecret } = body;
 
-    if (!url || !token) {
+    if (!url || !clientId || !clientSecret) {
       return NextResponse.json(
-        { error: "URL 和 Token 不能为空" },
+        { error: "URL、Client ID 和 Client Secret 不能为空" },
         { status: 400 }
       );
     }
 
-    upsertQlConnection(url, token);
+    upsertQlConnection(url, clientId, clientSecret);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("[config:post]", error);

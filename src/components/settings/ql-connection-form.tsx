@@ -12,7 +12,8 @@ import { GlassContainer } from "@/components/layout/glass-container";
 
 const connectionSchema = z.object({
   url: z.string().url("请输入有效的URL"),
-  token: z.string().min(1, "请输入Token"),
+  clientId: z.string().min(1, "请输入 Client ID"),
+  clientSecret: z.string().min(1, "请输入 Client Secret"),
 });
 
 type ConnectionFormData = z.infer<typeof connectionSchema>;
@@ -26,7 +27,8 @@ export function QlConnectionForm() {
     resolver: zodResolver(connectionSchema),
     defaultValues: {
       url: "",
-      token: "",
+      clientId: "",
+      clientSecret: "",
     },
   });
 
@@ -36,7 +38,7 @@ export function QlConnectionForm() {
         const res = await fetch("/api/qinglong/config");
         const data = await res.json();
         if (data.data) {
-          form.reset({ url: data.data.url, token: data.data.token });
+          form.reset({ url: data.data.url, clientId: data.data.clientId, clientSecret: data.data.clientSecret });
         }
       } catch (error) {
         console.error("加载配置失败:", error);
@@ -91,15 +93,26 @@ export function QlConnectionForm() {
             )}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="token">Token</Label>
+            <Label htmlFor="clientId">Client ID</Label>
             <Input
-              id="token"
-              type="password"
-              placeholder="请输入青龙面板的 OpenAPI Token"
-              {...form.register("token")}
+              id="clientId"
+              placeholder="请输入 Client ID"
+              {...form.register("clientId")}
             />
-            {errors.token && (
-              <p className="text-sm text-red-500">{errors.token.message}</p>
+            {errors.clientId && (
+              <p className="text-sm text-red-500">{errors.clientId.message}</p>
+            )}
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="clientSecret">Client Secret</Label>
+            <Input
+              id="clientSecret"
+              type="password"
+              placeholder="请输入 Client Secret"
+              {...form.register("clientSecret")}
+            />
+            {errors.clientSecret && (
+              <p className="text-sm text-red-500">{errors.clientSecret.message}</p>
             )}
           </div>
         </div>
