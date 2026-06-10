@@ -1,5 +1,9 @@
 # daily_push——微信每日推送
 
+## 目录结构
+- `qinglong/` - 青龙面板脚本目录，包含所有青龙相关的JS脚本
+- `index.js` - 主程序入口
+- `configs.json` - 配置文件（需要用户自行创建）
 
 ## 效果参考
 
@@ -43,10 +47,11 @@ node index.js
 2、可以使用GitHub Actions以达到每日自动发送消息，默认发送时间为七点半。  
 3、青龙面板部署
 ```text
-拉库命令：ql repo https://github.com/lengsukq/daily_push.git "ql-" "" "index.js"
+拉库命令：ql repo https://github.com/lengsukq/daily_push.git "qinglong/ql-" "" "index.js"
 --拉库完成后，需要在青龙面板-脚本管理lengsukq——daily_push文件夹中添加configs.json文件并配置好
 --青龙面板-依赖管理-创建依赖 分别添加 axios、dayjs、solarlunar 三个nodejs的依赖，安装完成后即可运行
 --不添加congfigs.json文件，可以选择添加环境变量：daliyPushConfigs，内容跟json文件一样即可
+--青龙脚本文件位于 qinglong/ 目录下
 ```
 ---
 ***需要在根目录添加configs.json 文件***  
