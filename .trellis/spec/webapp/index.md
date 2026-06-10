@@ -19,7 +19,7 @@ This is a **Next.js (App Router) full-stack application** that serves as a visua
 | [Page & Route Patterns](./hook-guidelines.md) | App Router pages, layouts, API routes | Filled |
 | [State & Data Management](./state-management.md) | Server state, forms, SQLite/Drizzle | Filled |
 | [Type Safety](./type-safety.md) | TypeScript patterns, Zod validation | Filled |
-| [Quality Guidelines](./quality-guidelines.md) | Error handling, Docker, code standards | Filled |
+| [Quality Guidelines](./quality-guidelines.md) | Clean Code, error handling, Docker, code standards | Filled |
 
 ---
 
@@ -36,5 +36,7 @@ This is a **Next.js (App Router) full-stack application** that serves as a visua
 | Language | TypeScript (strict) |
 
 ---
+
+**Clean Code**: All code must follow the Clean Code principles documented in [Quality Guidelines](./quality-guidelines.md#clean-code-principles).
 
 **Language**: Chinese in user-facing UI, English in code/specs.
