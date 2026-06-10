@@ -1,4 +1,9 @@
-configs.json
-/node_modules
-/.idea
-/.env
+node_modules/
+.next/
+out/
+data/
+drizzle/
+*.tsbuildinfo
+next-env.d.ts
+.idea/
+*.log
