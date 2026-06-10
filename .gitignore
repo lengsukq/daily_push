@@ -7,3 +7,6 @@ drizzle/
 next-env.d.ts
 .idea/
 *.log
+.pnp.cjs
+.pnp.loader.mjs
+.yarn/
