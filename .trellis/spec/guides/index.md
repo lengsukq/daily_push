@@ -23,6 +23,7 @@ These guides help you **ask the right questions before coding**.
 |-------|---------|-------------|
 | [Code Reuse Thinking Guide](./code-reuse-thinking-guide.md) | Identify patterns and reduce duplication | When you notice repeated patterns |
 | [Cross-Layer Thinking Guide](./cross-layer-thinking-guide.md) | Think through data flow across layers | Features spanning multiple layers |
+| [3D Elements Thinking Guide](./3d-elements-thinking-guide.md) | Design considerations for 3D Web UI | When implementing 3D visual effects |
 
 ---
 
@@ -46,6 +47,16 @@ These guides help you **ask the right questions before coding**.
 - [ ] **You're creating a new utility/helper function** ← Search first!
 
 → Read [Code Reuse Thinking Guide](./code-reuse-thinking-guide.md)
+
+### When to Think About 3D Elements Design
+
+- [ ] You're adding visual depth effects (shadows, transforms, perspective)
+- [ ] You're implementing hover animations or transitions
+- [ ] You're choosing materials (glass, metal, neon)
+- [ ] You're designing for科技感/innovation-focused pages
+- [ ] You're integrating 3D effects with existing design system
+
+→ Read [3D Elements Thinking Guide](./3d-elements-thinking-guide.md)
 
 ---
 

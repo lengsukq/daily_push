@@ -20,6 +20,7 @@ This is a **Next.js (App Router) full-stack application** that serves as a visua
 | [State & Data Management](./state-management.md) | Server state, forms, SQLite/Drizzle | Filled |
 | [Type Safety](./type-safety.md) | TypeScript patterns, Zod validation | Filled |
 | [Quality Guidelines](./quality-guidelines.md) | Clean Code, error handling, Docker, code standards | Filled |
+| [3D Elements Guide](./design/3d-elements-guide.md) | 3D Web UI design patterns, CSS 3D, glassmorphism | Filled |
 
 ---
 
@@ -30,6 +31,7 @@ This is a **Next.js (App Router) full-stack application** that serves as a visua
 | Framework | Next.js 14+ (App Router) |
 | Styling | TailwindCSS + shadcn/ui |
 | UI Style | iOS-inspired: large radius, glassmorphism, white, animations |
+| 3D Enhancement | 3D Elements: CSS 3D transforms, perspective, layered shadows, glow effects |
 | Database | SQLite via Drizzle ORM |
 | Auth | API Token (no user auth for MVP) |
 | Deployment | Docker multi-stage build |
