@@ -58,11 +58,13 @@ max_journal_lines: 2000
 # Trellis auto-detects workspaces during `trellis init`, but you can also
 # configure them manually here.
 #
-# packages:
-#   frontend:
-#     path: packages/frontend
-#   backend:
-#     path: packages/backend
+packages:
+  webapp:
+    path: ./
+    type: nextjs
+  scripts:
+    path: ./
+    type: nodejs
 #   docs:
 #     path: docs-site
 #     type: submodule

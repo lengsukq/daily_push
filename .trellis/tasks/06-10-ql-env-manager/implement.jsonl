@@ -1,0 +1,7 @@
+{"file": ".trellis/spec/webapp/index.md", "reason": "Top-level index for the webapp package guidelines"}
+{"file": ".trellis/spec/webapp/directory-structure.md", "reason": "File layout and naming conventions for the Next.js app"}
+{"file": ".trellis/spec/webapp/component-guidelines.md", "reason": "shadcn/ui component patterns and iOS design system"}
+{"file": ".trellis/spec/webapp/hook-guidelines.md", "reason": "App Router pages, layouts, API route patterns"}
+{"file": ".trellis/spec/webapp/state-management.md", "reason": "SQLite/Drizzle persistence, form state, data flow"}
+{"file": ".trellis/spec/webapp/type-safety.md", "reason": "TypeScript types, Zod validation, API route validation"}
+{"file": ".trellis/spec/webapp/quality-guidelines.md", "reason": "Docker deployment, error handling, code standards"}
