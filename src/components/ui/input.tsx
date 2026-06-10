@@ -1,14 +1,22 @@
 import * as React from "react"
-
 import { cn } from "@/lib/utils"
 
-const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {}
+
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ...props }, ref) => {
     return (
       <input
         type={type}
         className={cn(
-          "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+          "flex h-11 w-full rounded-xl px-4 py-3 text-sm transition-all duration-300",
+          "bg-gradient-to-br from-black/30 to-black/20 backdrop-blur-sm",
+          "border border-white/10 text-white placeholder:text-white/30",
+          "shadow-[0_4px_6px_-1px_rgba(0,0,0,0.3)_inset,0_2px_4px_-2px_rgba(0,0,0,0.2)_inset]",
+          "focus:outline-none focus:border-blue-500/50 focus:shadow-[0_4px_6px_-1px_rgba(0,0,0,0.3)_inset,0_0_0_3px_rgba(59,130,246,0.2),0_0_20px_rgba(59,130,246,0.1)]",
+          "hover:border-white/20 hover:bg-black/40",
+          "disabled:cursor-not-allowed disabled:opacity-50",
           className
         )}
         ref={ref}
