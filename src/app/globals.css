@@ -4,46 +4,315 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
-    --radius: 0.75rem;
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 8%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 8%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 47% 6%;
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 217 33% 17%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 63% 55%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 217 91% 60%;
+    --radius: 1rem;
+    
+    /* 3D Effects Variables */
+    --glow-primary: 217 91% 60%;
+    --glow-accent: 270 91% 65%;
+    --glow-emerald: 160 84% 55%;
+    --shadow-depth: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+    --shadow-hover: 0 35px 60px -15px rgba(0, 0, 0, 0.7);
   }
 }
 
 @layer base {
   * {
     @apply border-border;
+    transform-style: preserve-3d;
+  }
+
+  html {
+    perspective: 1200px;
   }
 
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
+    overflow-x: hidden;
+  }
+}
+
+@layer components {
+  /* 3D Card Base */
+  .card-3d {
+    position: relative;
+    background: linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.02) 100%
+    );
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 24px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateZ(0);
+    box-shadow: 
+      0 25px 50px -12px rgba(0, 0, 0, 0.5),
+      0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+      0 2px 0 0 rgba(255, 255, 255, 0.05) inset;
+  }
+
+  .card-3d::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    background: linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      transparent 50%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .card-3d:hover {
+    transform: translateZ(10px) rotateX(-1deg) rotateY(1deg);
+    box-shadow: 
+      0 35px 60px -15px rgba(0, 0, 0, 0.6),
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+      0 2px 0 0 rgba(255, 255, 255, 0.1) inset,
+      0 0 40px rgba(59, 130, 246, 0.15);
+  }
+
+  .card-3d:hover::before {
+    opacity: 1;
+  }
+
+  /* Glass Morphism */
+  .glass {
+    background: linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.05) 100%
+    );
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 
+      0 20px 40px -10px rgba(0, 0, 0, 0.4),
+      0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+  }
+
+  /* Glowing Border Effect */
+  .glow-border {
+    position: relative;
+  }
+
+  .glow-border::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: linear-gradient(
+      135deg,
+      rgba(59, 130, 246, 0.5) 0%,
+      rgba(147, 51, 234, 0.5) 50%,
+      rgba(16, 185, 129, 0.5) 100%
+    );
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    filter: blur(8px);
+  }
+
+  .glow-border:hover::after {
+    opacity: 0.6;
+  }
+
+  /* 3D Button */
+  .btn-3d {
+    position: relative;
+    background: linear-gradient(145deg, var(--primary), color-mix(in srgb, var(--primary) 80%, black));
+    border: none;
+    border-radius: 14px;
+    padding: 12px 24px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateZ(0);
+    box-shadow: 
+      0 10px 25px -5px rgba(59, 130, 246, 0.4),
+      0 4px 0 0 rgba(37, 99, 235, 0.8),
+      0 2px 0 0 rgba(29, 78, 216, 0.6);
+  }
+
+  .btn-3d:hover {
+    transform: translateY(-2px) translateZ(10px);
+    box-shadow: 
+      0 15px 35px -5px rgba(59, 130, 246, 0.5),
+      0 6px 0 0 rgba(37, 99, 235, 0.8),
+      0 3px 0 0 rgba(29, 78, 216, 0.6);
+  }
+
+  .btn-3d:active {
+    transform: translateY(2px) translateZ(0);
+    box-shadow: 
+      0 5px 15px -5px rgba(59, 130, 246, 0.3),
+      0 2px 0 0 rgba(37, 99, 235, 0.8),
+      0 1px 0 0 rgba(29, 78, 216, 0.6);
+  }
+
+  /* 3D Input */
+  .input-3d {
+    background: linear-gradient(
+      145deg,
+      rgba(0, 0, 0, 0.3) 0%,
+      rgba(0, 0, 0, 0.2) 100%
+    );
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    padding: 12px 16px;
+    color: var(--foreground);
+    transition: all 0.3s ease;
+    box-shadow: 
+      0 4px 6px -1px rgba(0, 0, 0, 0.3) inset,
+      0 2px 4px -2px rgba(0, 0, 0, 0.2) inset;
+  }
+
+  .input-3d:focus {
+    outline: none;
+    border-color: rgba(59, 130, 246, 0.5);
+    box-shadow: 
+      0 4px 6px -1px rgba(0, 0, 0, 0.3) inset,
+      0 0 0 3px rgba(59, 130, 246, 0.2),
+      0 0 20px rgba(59, 130, 246, 0.1);
+  }
+
+  .input-3d::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  /* Floating Element */
+  .float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) translateZ(0); }
+    50% { transform: translateY(-5px) translateZ(10px); }
+  }
+
+  /* Pulse Glow */
+  .pulse-glow {
+    animation: pulseGlow 3s ease-in-out infinite;
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { 
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    }
+    50% { 
+      box-shadow: 0 0 40px rgba(59, 130, 246, 0.6), 0 0 80px rgba(147, 51, 234, 0.3);
+    }
+  }
+
+  /* Light Sweep Effect */
+  .light-sweep {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .light-sweep::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transition: left 0.6s ease;
+  }
+
+  .light-sweep:hover::before {
+    left: 100%;
+  }
+
+  /* Grid Background */
+  .bg-grid {
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+
+  /* Gradient Text */
+  .text-gradient {
+    background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #34d399 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Depth Shadow */
+  .shadow-depth {
+    box-shadow: 
+      0 25px 50px -12px rgba(0, 0, 0, 0.5),
+      0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+  }
+
+  .shadow-depth-lg {
+    box-shadow: 
+      0 35px 60px -15px rgba(0, 0, 0, 0.6),
+      0 0 0 1px rgba(255, 255, 255, 0.08) inset;
   }
 }
 
 @layer utilities {
-  .glass {
-    @apply bg-white/70 backdrop-blur-xl border border-white/30 shadow-lg shadow-black/5;
+  .preserve-3d {
+    transform-style: preserve-3d;
   }
 
-  .glass-card {
-    @apply rounded-2xl border-0 shadow-lg shadow-black/5 bg-white/80 backdrop-blur-xl;
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .perspective-1500 {
+    perspective: 1500px;
+  }
+
+  .translate-z-0 {
+    transform: translateZ(0);
+  }
+
+  .translate-z-10 {
+    transform: translateZ(10px);
+  }
+
+  .translate-z-20 {
+    transform: translateZ(20px);
+  }
+
+  .translate-z-30 {
+    transform: translateZ(30px);
   }
 }
